@@ -1,24 +1,45 @@
 # Standard Storage Language (SSL)
 
 ## Overview
-The **Standard Storage Language (SSL)** is a simple C++ program that allows users to store and retrieve different types of data using a string identifier (data name). It uses the `std::variant` class to store different types of data, such as `int`, `double`, and `std::string`. The data is stored in an unordered map, which allows for efficient lookups by the data name.
+The **Standard Storage Language (SSL)** is a C++ program that provides a simple interface to store and retrieve data using string identifiers. It leverages `std::variant` to handle different types of data (`int`, `double`, and `std::string`) and uses an `unordered_map` for efficient lookups.
 
-The SSL program offers two primary commands:
+The SSL program supports the following commands:
 1. `store`: Store data associated with a name.
-2. `see`: Retrieve and display stored data by its name.
+2. `see`: Retrieve and display data by its name.
 
 ## Features
-- Store different data types: integers, floating-point numbers, and strings.
-- Retrieve data by name and display it according to its type.
-- Command-line interface for interaction.
+- **Multiple Data Types**: Supports `int`, `double`, and `std::string` (or text).
+- **Interactive CLI**: Command-line interface for storing and retrieving data.
+- **Input Validation**: Ensures valid input for the specified data type.
+- **Flexible Text Input**: Allows multi-word strings or text values.
 
 ## Structure
 
-### 1. **StandardStorage Class**
-   - **Purpose**: This class handles data storage and retrieval operations.
+### 1. **`StandardStorage` Class**
+   - **Purpose**: Manages data storage and retrieval.
    - **Methods**:
-     - `store(const std::string& dataName, const std::variant<int, double, std::string>& data)`: Stores data with a given name and value. The value can be of type `int`, `double`, or `std::string`.
-     - `see(const std::string& dataName)`: Retrieves and displays data stored under the provided name. It checks the type of the data and prints it accordingly.
+     - `store(const std::string& dataName, const std::variant<int, double, std::string>& data)`: Stores the data.
+     - `see(const std::string& dataName)`: Displays the stored data, handling its type dynamically.
+   - **Private Members**:
+     - `std::unordered_map<std::string, std::variant<int, double, std::string>> storage`: The data container.
+
+### 2. **Utility Functions**
+   - `is_integer(const std::string& str)`: Checks if a string represents a valid integer.
+   - `is_double(const std::string& str)`: Checks if a string represents a valid floating-point number.
+
+### 3. **Main Function**
+   - **Interactive Commands**:
+     - `store`: Prompts for a name, type, and value, and stores the data.
+     - `see`: Displays the value of a given name, if it exists.
+     - `exit`: Terminates the program.
+
+## Usage
+
+### Running the Program
+Compile and run the program in a terminal:
+```bash
+g++ -std=c++17 -o standard_storage standard_storage.cpp
+./standard_storage
 
    - **Private Members**:
      - `std::unordered_map<std::string, std::variant<int, double, std::string>> storage`: The storage container, mapping each data name to a `std::variant` containing the data.
@@ -51,18 +72,35 @@ The SSL program offers two primary commands:
      ```
      Enter a command (store or see) or 'exit' to quit: exit
      ```
-
+```
 ## Example
 
-Here’s an example of how the program works:
+Enter a command (store or see) or 'exit' to quit: store
+Enter the name of the data: age
+Enter the type of data (int, double, string, text): int
+Enter an integer value: 30
 
-Enter a command (store or see) or 'exit' to quit: store Enter the name of the data: age Enter the type of data (int, double, string): int Enter an integer value: 30
+Enter a command (store or see) or 'exit' to quit: store
+Enter the name of the data: height
+Enter the type of data (int, double, string, text): double
+Enter a double value: 5.9
 
-Enter a command (store or see) or 'exit' to quit: store Enter the name of the data: height Enter the type of data (int, double, string): double Enter a double value: 5.9
+Enter a command (store or see) or 'exit' to quit: store
+Enter the name of the data: message
+Enter the type of data (int, double, string, text): text
+Enter a string (text) value: Hello, world!
 
-Enter a command (store or see) or 'exit' to quit: see Enter the name of the data: age Data (age): 30
+Enter a command (store or see) or 'exit' to quit: see
+Enter the name of the data: age
+Data (age): 30
 
-Enter a command (store or see) or 'exit' to quit: see Enter the name of the data: height Data (height): 5.9
+Enter a command (store or see) or 'exit' to quit: see
+Enter the name of the data: height
+Data (height): 5.9
+
+Enter a command (store or see) or 'exit' to quit: see
+Enter the name of the data: message
+Data (message): Hello, world!
 
 Enter a command (store or see) or 'exit' to quit: exit
 
