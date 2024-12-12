@@ -3,6 +3,8 @@
 #include <string>
 #include <variant>
 #include <limits>
+#include <cctype>
+#include <sstream>
 
 class StandardStorage {
 public:
@@ -34,6 +36,24 @@ private:
     std::unordered_map<std::string, std::variant<int, double, std::string>> storage; // Map to hold the data
 };
 
+// Utility function to check if a string is a valid integer
+bool is_integer(const std::string& str) {
+    if (str.empty()) return false;
+    for (size_t i = 0; i < str.length(); ++i) {
+        if (i == 0 && str[i] == '-') continue; // Allow negative sign at the beginning
+        if (!isdigit(str[i])) return false;
+    }
+    return true;
+}
+
+// Utility function to check if a string is a valid double
+bool is_double(const std::string& str) {
+    std::istringstream stream(str);
+    double val;
+    stream >> val;
+    return !stream.fail() && stream.eof();
+}
+
 int main() {
     StandardStorage db;
     std::string command;
@@ -50,27 +70,36 @@ int main() {
             std::cout << "Enter the name of the data: ";
             std::cin >> name;
             
-            std::cout << "Enter the type of data (int, double, string): ";
+            std::cout << "Enter the type of data (int, double, string, text): ";
             std::string type;
             std::cin >> type;
             
             if (type == "int") {
                 int value;
                 std::cout << "Enter an integer value: ";
-                std::cin >> value;
+                while (!(std::cin >> value)) {
+                    std::cout << "Invalid input! Please enter a valid integer: ";
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                }
                 db.store(name, value);
             } else if (type == "double") {
                 double value;
                 std::cout << "Enter a double value: ";
-                std::cin >> value;
+                while (!(std::cin >> value)) {
+                    std::cout << "Invalid input! Please enter a valid double: ";
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                }
                 db.store(name, value);
-            } else if (type == "string") {
+            } else if (type == "string" || type == "text") {
                 std::string value;
-                std::cout << "Enter a string value: ";
-                std::cin >> value;
+                std::cout << "Enter a string (text) value: ";
+                std::cin.ignore();  // Clear the newline left over in the input buffer
+                std::getline(std::cin, value); // Allow multi-word input
                 db.store(name, value);
             } else {
-                std::cout << "Invalid type! Only 'int', 'double', or 'string' are allowed." << std::endl;
+                std::cout << "Invalid type! Only 'int', 'double', 'string', or 'text' are allowed." << std::endl;
             }
         } else if (command == "see") {
             // User wants to see a stored data, get the data name
