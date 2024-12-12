@@ -1,0 +1,35 @@
+name: C++ CI Workflow
+
+on:
+  push:
+    branches:
+      - main  # This will trigger the workflow when you push to the 'main' branch
+  pull_request:
+    branches:
+      - main  # This will trigger the workflow for pull requests to the 'main' branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Runs the workflow on an Ubuntu VM
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2  # Check out the repository code
+
+    - name: Set up GCC
+      uses: actions/setup-cpp@v1  # Set up the C++ compiler
+
+    - name: Install build dependencies
+      run: sudo apt-get install g++  # Ensure g++ is installed
+
+    - name: Compile the C++ program
+      run: |
+        g++ -std=c++17 -o standard_storage standard_storage.cpp  # Compile the C++ code
+
+    - name: Run the program
+      run: |
+        ./standard_storage  # Run the compiled C++ program
+
+    - name: Display output
+      run: |
+        echo "Program executed successfully"
