@@ -1,3 +1,5 @@
+![Image ALT](https://raw.githubusercontent.com/CalestialAshley35/Standard-Storage-Language/refs/heads/main/images/file-SyE2uKvuarZU8s3Xinksn2.webp)
+
 # Standard Storage Language (SSL)
 
 ## Overview
